@@ -1,0 +1,45 @@
+{
+  "spec_id": "SCREEN_OUTLINE-00",
+  "version": "0.1.0",
+  "checks": [
+    {
+      "check_id": "CHECK-01",
+      "name": "screen_outline_required_sections",
+      "severity": "high",
+      "target_section": "ROOT",
+      "config": {
+        "required": [
+          "1. Overview",
+          "2. Screens",
+          "3. Navigation",
+          "4. Component surface"
+        ]
+      },
+      "repair_mode": "section_patch",
+      "repair_level": "section",
+      "repair_hint": "Per-spec required-section lists await kernel support; today this check is skipped (unknown name)."
+    },
+    {
+      "check_id": "CHECK-02",
+      "name": "unresolved_placeholders",
+      "severity": "high",
+      "target_section": "ROOT",
+      "config": {},
+      "repair_mode": "global_patch",
+      "repair_level": "global",
+      "repair_hint": "Resolve every `<...>` placeholder."
+    },
+    {
+      "check_id": "CHECK-03",
+      "name": "section_marker_integrity",
+      "severity": "high",
+      "target_section": "SCREENS",
+      "config": {
+        "marker_prefix": "SCREENS"
+      },
+      "repair_mode": "global_patch",
+      "repair_level": "global",
+      "repair_hint": "none"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# fe-compiler-v1 — `screen_outline` step section tree.
+#
+# Locked schema: axcore.section-tree/v1 (see
+# src/fe_compiler/section_tree/__init__.py). Section ids are stable
+# contracts; renaming any id is a breaking change for every
+# downstream `section_impacts.<workflow_id>.yaml` that references
+# it (none today — FE ships zero impacts files at v1; see
+# tests/unit/test_real_fe_section_configs.py).
+#
+# Top-level id is `SCREENS` to mirror the validation spec's
+# `target_section`/`marker_prefix` and the existing
+# `[SECTION_START:SCREENS.*]` template anchors used by
+# screen_outline_validate.json (CHECK-03 keys off the same prefix).
+#
+# Why these four sections (and only these four)
+# ---------------------------------------------
+# The screen-outline template is a fixed four-part artifact:
+# Overview, Screens (list), Navigation, Component surface. Each is
+# a navigable structural region that downstream readers / future
+# steps cite by name. The repeatable `SCR-NN` rows under
+# SCREENS.LIST and `CMP-NN` rows under SCREENS.COMPONENT_SURFACE
+# are NOT modelled as tree nodes — those identifiers contain
+# hyphens (disallowed by the v1 SECTION_ID_PATTERN) and individual
+# screen / component rows are content, not navigable structure.
+
+schema: axcore.section-tree/v1
+step_id: screen_outline
+
+sections:
+  - id: SCREENS
+    title: Screens
+    children:
+      - id: SCREENS.OVERVIEW
+        title: Overview
+      - id: SCREENS.LIST
+        title: Screens
+      - id: SCREENS.NAVIGATION
+        title: Navigation
+      - id: SCREENS.COMPONENT_SURFACE
+        title: Component surface

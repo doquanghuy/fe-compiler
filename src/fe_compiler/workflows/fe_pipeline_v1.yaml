@@ -1,0 +1,81 @@
+# fe-compiler-v1 — `fe-pipeline-v1` workflow.
+#
+# Spec Kit public workflow schema (`schema_version: "1.0"`). Same
+# integration mechanics as `be-pipeline-v1` — dispatches the
+# canonical `/speckit-axcore-step-run` SKILL via a `type: prompt`
+# step (the dispatcher-bypass pattern that keeps the four naming
+# surfaces in lockstep — see axcore-v1/docs/spec-kit-extension.md
+# §5.3).
+#
+# Identity:
+#   plugin        = fe                          (see plugin.yaml)
+#   workflow_id   = fe-pipeline-v1              (lowercase
+#                                                alphanumeric + hyphens)
+#   extension cmd = speckit.axcore.step-run     (canonical, in
+#                                                axcore-v1/extension.yml)
+#   skill dir     = .claude/skills/speckit-axcore-step-run/
+#   skill name    = speckit-axcore-step-run
+#   slash form    = /speckit-axcore-step-run    (what this workflow sends)
+#
+# Status:
+# - One real action step today: `screen_outline`. No gate, no
+#   switch, no fan-out / fan-in. The smallest shape that proves
+#   the FE plugin participates in the shared final path.
+# - Future steps (component_surface, routing_surface, …) land as
+#   sibling action steps; gates and fan-out shapes can be added
+#   when there is a real review surface that needs them.
+
+schema_version: "1.0"
+
+workflow:
+  id: "fe-pipeline-v1"
+  name: "Frontend compiler pipeline"
+  version: "1.0.0"
+  author: "fe-compiler-v1"
+  description: |
+    Produce the frontend screen-outline artifact through the
+    axcore kernel. Proves multi-compiler coexistence: the same
+    SKILL + kernel + wire contract that powers `be-pipeline-v1`
+    drives this FE pipeline against fe-compiler-v1's
+    plugin-owned bundles.
+
+requires:
+  speckit_version: ">=0.7.2"
+  integrations:
+    any: ["claude"]
+
+inputs:
+  workspace:
+    type: string
+    required: false
+    default: "."
+    prompt: "Path to the workspace root."
+  intent:
+    type: string
+    default: "auto"
+    enum: ["auto", "improve", "rebuild"]
+  # 3-channel input model — mirrors the canonical clean inputs from be-pipeline-v1:
+  #   seed_path             → file-first build brief / seed material
+  #                           (the `what is being built` channel).
+  #   review_comments_path  → reviewer guidance for the current run
+  #                           (file-first structured JSON).
+  #   prior_run_id          → wires the prior-run findings memory.
+  # The legacy `human_notes` input has been retired — it was a flat-string
+  # shim that the 3-channel model replaces. The SKILL still accepts it as
+  # a strict backward-compat shim, but this canonical workflow no longer
+  # threads it through.
+  seed_path:
+    type: string
+    default: ""
+  review_comments_path:
+    type: string
+    default: ""
+  prior_run_id:
+    type: string
+    default: ""
+
+steps:
+  - id: screen_outline
+    type: prompt
+    integration: "claude"
+    prompt: "/speckit-axcore-step-run plugin_id=fe step_id=screen_outline intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }}"

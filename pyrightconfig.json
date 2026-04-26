@@ -1,0 +1,10 @@
+{
+  "pythonVersion": "3.11",
+  "venvPath": ".",
+  "venv": ".venv",
+  "include": ["src/fe_compiler", "tests"],
+  "extraPaths": ["src"],
+  "reportMissingImports": "warning",
+  "reportMissingModuleSource": "none",
+  "typeCheckingMode": "basic"
+}

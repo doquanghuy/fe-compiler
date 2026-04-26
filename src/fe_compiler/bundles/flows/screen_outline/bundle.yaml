@@ -1,0 +1,83 @@
+# fe-compiler-v1 — `screen_outline` step bundle manifest.
+#
+# Identity:
+#   plugin_id   = fe
+#   step_id     = screen_outline
+#   consumes    = nothing today (entry step of fe-pipeline-v1)
+#   produces    = single primary artifact (Markdown)
+
+step_id: screen_outline
+
+description: |
+  Frontend-domain `screen_outline` step. Produces a high-level
+  description of the UI's screens (pages), the navigation surface
+  between them, and the cross-screen component surface.
+
+  This is the entry step of `fe-pipeline-v1`. It has no required
+  upstream — future frontend steps can declare cross-step
+  consumption via `required_inputs` (§6.14) once they exist.
+
+resources:
+  template:
+    type: template
+    path: screen_outline.md
+    description: |
+      Generation template for the screen-outline artifact. Section
+      anchors use `SCREENS.*` identifiers — stable across the
+      validation spec.
+  rules:
+    type: rules
+    path: screen_outline_rules.md
+    description: Authoring rules for the screen-outline artifact.
+  validate:
+    type: validation_spec
+    path: screen_outline_validate.json
+    content_type: application/json
+    description: |
+      Declarative validation spec — required-section presence
+      checks anchored on the SCREENS.* section markers, plus
+      placeholder-resolution and section-marker integrity.
+
+required_inputs: []
+
+outputs:
+  - key: artifact
+    kind: artifact
+    content_type: text/markdown
+    description: |
+      Screen outline artifact. Single primary output (legacy
+      single-output shape — §6.13).
+
+validation_policy:
+  mode: deterministic
+  on_failure: repair
+  semantic_hooks: []
+
+retry_policy:
+  max_attempts: 2
+  backoff: none
+  preserve_artifact_shape: true
+
+dependency_metadata: {}
+
+# EXEC-A per-step execution + capability contract. The entry
+# step of fe-pipeline-v1: no upstream to consume. Supports
+# improve + rebuild; validation is real (SCREENS section markers
+# + placeholder resolution). Flagged `review_heavy: true`
+# because UI / navigation-surface output benefits from a human
+# reviewer before downstream steps (once they exist) depend on
+# it. Descriptive flag — the workflow layer decides what to do
+# with it.
+execution:
+  supports_improve: true
+  supports_rebuild: true
+  validate_enabled: true
+  repair_context_enabled: true
+  requires_gate: false
+  auto_continue_allowed: true
+  terminal: false
+  review_heavy: true
+
+metadata:
+  owner: fe-compiler maintainers
+  status: real

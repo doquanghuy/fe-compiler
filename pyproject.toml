@@ -1,0 +1,130 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ---------------------------------------------------------------------------
+# Project metadata.
+# Distribution name is `fe-compiler-v1`; importable package is `fe_compiler`.
+#
+# fe-compiler-v1 is a consumer/plugin package for axcore-v1:
+#   - it depends on axcore-v1 for orchestration + kernel + contracts;
+#   - it contributes frontend-domain workflows, step bundles, and a
+#     thin optional developer CLI;
+#   - it does not own generic orchestration.
+#
+# The second real compiler package (sibling of be-compiler-v1), the
+# existence of which proves the platform is not secretly BE-only.
+# ---------------------------------------------------------------------------
+[project]
+name = "fe-compiler-v1"
+version = "0.1.0"
+description = "fe-compiler-v1 — frontend-domain compiler package built on axcore-v1."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [
+    { name = "fe-compiler maintainers" },
+]
+keywords = ["axcore", "fe-compiler", "frontend", "compiler", "plugin"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+]
+
+dependencies = [
+    "axcore-v1 @ file:///Users/huydo/Desktop/axcore-v1",
+    "pydantic>=2.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.4.0",
+    "pyright>=1.1.350",
+    "pytest>=8.0",
+    "pytest-mock>=3.14",
+]
+
+# Optional dev CLI (not the user-facing runtime — Spec Kit is).
+[project.scripts]
+fe-compiler = "fe_compiler.cli.main:main"
+
+# axcore plugin discovery entry point. The entry-point NAME ("fe") is
+# the plugin_id as it appears to the framework; cross-checked against
+# `plugin_id` inside plugin.yaml at load time.
+[project.entry-points."axcore.plugins"]
+fe = "fe_compiler.plugin.entry:FeCompilerPlugin"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["fe_compiler*"]
+
+[tool.setuptools.package-data]
+"fe_compiler" = [
+    "plugin/*.yaml",
+    "plugin/*.yml",
+    "workflows/*.yaml",
+    "workflows/*.yml",
+    "bundles/**/*.yaml",
+    "bundles/**/*.yml",
+    "bundles/**/*.md",
+    "bundles/**/*.json",
+]
+
+# ---------------------------------------------------------------------------
+# Ruff — lint + format. Mirrors be-compiler-v1's config so the two
+# consumer packages stay stylistically aligned.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "N802", "B017"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["fe_compiler"]
+known-third-party = ["axcore"]
+force-sort-within-sections = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+# ---------------------------------------------------------------------------
+# Pyright.
+# ---------------------------------------------------------------------------
+[tool.pyright]
+pythonVersion = "3.11"
+venvPath = "."
+venv = ".venv"
+include = ["src/fe_compiler", "tests"]
+extraPaths = ["src"]
+reportMissingImports = "warning"
+reportMissingModuleSource = "none"
+typeCheckingMode = "basic"
+
+# ---------------------------------------------------------------------------
+# Pytest.
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "--import-mode=importlib --strict-markers -ra"
+pythonpath = ["src"]
+markers = [
+    "slow: tests that take noticeable time to run",
+    "integration: tests that exercise fe-compiler against a live axcore-v1 host",
+]
