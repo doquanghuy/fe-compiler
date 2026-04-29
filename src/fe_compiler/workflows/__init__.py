@@ -3,7 +3,7 @@
 Each ``.yaml`` file in this package is a Spec Kit workflow
 definition. Workflows execute inside Spec Kit; action steps in
 those workflows dispatch ``axcore.*`` commands (see
-``axcore-v1/docs/spec-kit-extension.md``). This subpackage only
+``axcore/docs/spec-kit-extension.md``). This subpackage only
 ships the declarations — no runtime code.
 
 The plugin manifest (``fe_compiler/plugin/plugin.yaml``)

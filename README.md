@@ -1,21 +1,21 @@
-# fe-compiler-v1
+# fe-compiler
 
 Frontend-domain compiler package for
-[`axcore-v1`](https://example.invalid/axcore-v1). Sibling of
-`be-compiler-v1`.
+[`axcore`](https://example.invalid/axcore). Sibling of
+`be-compiler`.
 
 | Concern | Value |
 | ------- | ----- |
-| Distribution        | `fe-compiler-v1` |
+| Distribution        | `fe-compiler` |
 | Importable package  | `fe_compiler` |
 | Plugin id           | `fe` |
 | Workflow            | `fe-pipeline-v1` |
 | Step bundle         | `screen_outline` (single step today) |
 
-`axcore-v1` discovers this package through the `axcore.plugins`
+`axcore` discovers this package through the `axcore.plugins`
 entry-point group. This package contributes one Spec Kit
 workflow and one step bundle against the same
-`speckit.axcore.step-run` SKILL that powers `be-compiler-v1`.
+`speckit.axcore.step-run` SKILL that powers `be-compiler`.
 
 ## Scope today (honestly partial)
 
@@ -45,7 +45,7 @@ End users do NOT run workflow commands from this repo. This
 repo is a compiler/plugin package — workflows defined here are
 consumed from an **app repo** (e.g.
 [`idea-engine`](https://example.invalid/idea-engine)) that
-depends on `fe-compiler-v1` and has the `axcore` Spec Kit
+depends on `fe-compiler` and has the `axcore` Spec Kit
 extension installed:
 
 ```bash
@@ -59,15 +59,15 @@ Spec Kit dispatches the `/speckit-axcore-step-run` SKILL
 
 ## Install (dev)
 
-This package depends on `axcore-v1` via a `file://` direct
+This package depends on `axcore` via a `file://` direct
 reference (see `pyproject.toml`). Sibling checkouts are expected
-at `~/Desktop/axcore-v1`. Adjust the path if your layout differs.
+at `~/Desktop/axcore`. Adjust the path if your layout differs.
 
 ```bash
-pip install -e /path/to/fe-compiler-v1
+pip install -e /path/to/fe-compiler
 ```
 
-`axcore-v1` picks the plugin up at runtime once it is
+`axcore` picks the plugin up at runtime once it is
 pip-installed in the active environment.
 
 ## Where to read next
@@ -75,7 +75,7 @@ pip-installed in the active environment.
 - Docs index: [`docs/index.md`](docs/index.md).
 - Agent context: [`CLAUDE.md`](CLAUDE.md).
 - Full shell usage:
-  [`../axcore-v1/docs/commands.md`](../axcore-v1/docs/commands.md).
+  [`../axcore/docs/commands.md`](../axcore/docs/commands.md).
 
 ## License
 

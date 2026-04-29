@@ -12,7 +12,7 @@ step's primary-artifact section structure**. Each section has a
 canonical id (e.g. `SCREEN_OUTLINE.LAYOUT`) and a display title;
 ids nest hierarchically with a parent-prefix rule.
 
-The kernel in `axcore-v1` is intentionally domain-agnostic and
+The kernel in `axcore` is intentionally domain-agnostic and
 never parses compiler template prose. Section semantics belong to
 the compiler. `section_tree.yaml` is how the compiler encodes
 them so downstream layers (the validation spec, future

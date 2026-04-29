@@ -19,7 +19,7 @@ workflow is allowed (and each is optional). The filename embeds the
 workflow id so file ⇄ workflow alignment is detectable at load
 time without parsing the body. Mismatch is a hard error.
 
-Why this lives in the compiler (not in ``axcore-v1``)
+Why this lives in the compiler (not in ``axcore``)
 -----------------------------------------------------
 
 Section impacts are domain knowledge tied to a *specific* workflow.

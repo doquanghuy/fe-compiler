@@ -4,21 +4,22 @@ build-backend = "setuptools.build_meta"
 
 # ---------------------------------------------------------------------------
 # Project metadata.
-# Distribution name is `fe-compiler-v1`; importable package is `fe_compiler`.
+# Distribution name is `fe-compiler`; importable package is `fe_compiler`.
 #
-# fe-compiler-v1 is a consumer/plugin package for axcore-v1:
-#   - it depends on axcore-v1 for orchestration + kernel + contracts;
+# fe-compiler is a consumer/plugin package for axcore:
+#   - it depends on axcore for orchestration + kernel + contracts;
+#     compatibility: axcore>=0.1.0,<0.2.0
 #   - it contributes frontend-domain workflows, step bundles, and a
 #     thin optional developer CLI;
 #   - it does not own generic orchestration.
 #
-# The second real compiler package (sibling of be-compiler-v1), the
+# The second real compiler package (sibling of be-compiler), the
 # existence of which proves the platform is not secretly BE-only.
 # ---------------------------------------------------------------------------
 [project]
-name = "fe-compiler-v1"
+name = "fe-compiler"
 version = "0.1.0"
-description = "fe-compiler-v1 — frontend-domain compiler package built on axcore-v1."
+description = "fe-compiler — frontend-domain compiler package built on axcore."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
@@ -36,7 +37,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "axcore-v1 @ file:///Users/huydo/Desktop/axcore-v1",
+    "axcore>=0.1.0,<0.2.0",
     "pydantic>=2.0",
     "PyYAML>=6.0",
 ]
@@ -79,7 +80,7 @@ include = ["fe_compiler*"]
 ]
 
 # ---------------------------------------------------------------------------
-# Ruff — lint + format. Mirrors be-compiler-v1's config so the two
+# Ruff — lint + format. Mirrors be-compiler's config so the two
 # consumer packages stay stylistically aligned.
 # ---------------------------------------------------------------------------
 [tool.ruff]
@@ -126,5 +127,5 @@ addopts = "--import-mode=importlib --strict-markers -ra"
 pythonpath = ["src"]
 markers = [
     "slow: tests that take noticeable time to run",
-    "integration: tests that exercise fe-compiler against a live axcore-v1 host",
+    "integration: tests that exercise fe-compiler against a live axcore host",
 ]

@@ -12,7 +12,7 @@ template, rules, and validation spec::
         <step_id>_rules.md
         <step_id>_validate.json
 
-Why this lives in the compiler (not in ``axcore-v1``)
+Why this lives in the compiler (not in ``axcore``)
 -----------------------------------------------------
 
 Section semantics are domain knowledge: which sections a frontend

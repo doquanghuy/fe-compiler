@@ -1,4 +1,4 @@
-"""Optional dev CLI for ``fe-compiler-v1``.
+"""Optional dev CLI for ``fe-compiler``.
 
 Not the user-facing runtime. End users run the pipeline through
 Spec Kit (``specify workflow run fe-pipeline-v1``). This CLI

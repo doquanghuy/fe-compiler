@@ -1,4 +1,4 @@
-"""Domain-specific validators for ``fe-compiler-v1`` (scaffold).
+"""Domain-specific validators for ``fe-compiler`` (scaffold).
 
 Today the frontend steps rely entirely on ``axcore``'s
 deterministic-check runner (section-presence, placeholder

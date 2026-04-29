@@ -14,7 +14,7 @@ workflow-specific declaration** of which downstream steps (and
 which sections within them) are invalidated when a given upstream
 section changes.
 
-The kernel in `axcore-v1` is intentionally domain-agnostic — it
+The kernel in `axcore` is intentionally domain-agnostic — it
 neither infers nor authors impact relationships. The compiler owns
 the file, declares the cross-step dependency edges
 deterministically, and ships the file inside the step bundle. No

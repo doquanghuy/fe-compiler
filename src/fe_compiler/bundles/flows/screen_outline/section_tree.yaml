@@ -1,4 +1,4 @@
-# fe-compiler-v1 — `screen_outline` step section tree.
+# fe-compiler — `screen_outline` step section tree.
 #
 # Locked schema: axcore.section-tree/v1 (see
 # src/fe_compiler/section_tree/__init__.py). Section ids are stable

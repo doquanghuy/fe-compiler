@@ -1,6 +1,6 @@
-"""axcore-v1 plugin entry class for fe-compiler-v1.
+"""axcore plugin entry class for fe-compiler.
 
-``axcore-v1`` discovers consumer plugins through the
+``axcore`` discovers consumer plugins through the
 ``axcore.plugins`` entry-point group (see ``pyproject.toml``).
 The entry points resolve to :class:`~axcore.api.Plugin`
 subclasses. This module defines the one this package exposes.
@@ -9,17 +9,17 @@ Identity summary:
 
 - ``plugin_id``           ``fe``
 - Importable package       ``fe_compiler``
-- Distribution             ``fe-compiler-v1``
+- Distribution             ``fe-compiler``
 - Entry-point group        ``axcore.plugins``
 - Entry-point name         ``fe``
 
 The class is thin. All domain declarations (workflows, steps,
-bundle roots) live in :file:`plugin.yaml`. ``axcore-v1``'s
+bundle roots) live in :file:`plugin.yaml`. ``axcore``'s
 registry reads ``manifest_path`` to load the manifest at
 discovery time.
 
-Section-stale position (Task 7)
--------------------------------
+Section-stale position
+----------------------
 
 FE explicitly does **not** support runtime section-stale at v1.
 
@@ -72,10 +72,10 @@ def _manifest_path() -> Path:
 
 
 class FeCompilerPlugin(Plugin):
-    """Frontend-compiler plugin registered with ``axcore-v1``.
+    """Frontend-compiler plugin registered with ``axcore``.
 
     ``metadata.name`` MUST match the ``plugin_id`` in
-    ``plugin.yaml`` (``"fe"``) — ``axcore-v1``'s registry uses
+    ``plugin.yaml`` (``"fe"``) — ``axcore``'s registry uses
     that field as the dedup key and cross-checks it against the
     manifest at load time.
 
@@ -87,28 +87,25 @@ class FeCompilerPlugin(Plugin):
     metadata: PluginMetadata = PluginMetadata(
         name="fe",
         version=_package_version,
-        summary="Frontend-domain compiler plugin built on axcore-v1.",
+        summary="Frontend-domain compiler plugin built on axcore.",
     )
 
-    #: On-disk path to the plugin manifest YAML. ``axcore-v1``'s
+    #: On-disk path to the plugin manifest YAML. ``axcore``'s
     #: registry reads this at discovery time to load the manifest.
     manifest_path: Path = _manifest_path()
 
-    #: Task 7 — explicit, machine-checkable marker that FE does NOT
-    #: support runtime section-stale at v1. Test suites and
-    #: integration tests can read this attribute instead of
-    #: probing whether the hooks return ``None``. See module
-    #: docstring for the architectural rationale.
+    #: Explicit, machine-checkable marker that FE does NOT support runtime
+    #: section-stale at v1. Test suites and integration tests can read this
+    #: attribute instead of probing whether the hooks return ``None``. See
+    #: module docstring for the architectural rationale.
     SECTION_STALE_SUPPORTED: bool = False
 
-    def load_section_impact_graph(
-        self, workflow_id: str
-    ) -> SectionImpactGraph | None:
+    def load_section_impact_graph(self, workflow_id: str) -> SectionImpactGraph | None:
         """Explicit non-support: FE has no section-impact graph at v1.
 
-        Task 7 — this override exists to make FE's "no
-        section-stale" position structurally explicit instead of
-        inheriting a silent base-class default. FE ships zero
+        This override exists to make FE's "no section-stale" position
+        structurally explicit instead of inheriting a silent base-class
+        default. FE ships zero
         ``section_impacts.<workflow_id>.yaml`` files (the test
         suite ``test_real_fe_section_configs.py`` locks the empty
         impacts ledger); there is therefore nothing to build a
@@ -131,8 +128,7 @@ class FeCompilerPlugin(Plugin):
     ) -> dict[str, str] | None:
         """Explicit non-support: FE does not stamp per-section hashes.
 
-        Task 7 — same rationale as
-        :meth:`load_section_impact_graph`. FE has the
+        Same rationale as :meth:`load_section_impact_graph`. FE has the
         ``section_tree.yaml`` for ``screen_outline`` parsed and
         validated, but no downstream step consumes per-section
         change information at v1. Emitting per-section hashes

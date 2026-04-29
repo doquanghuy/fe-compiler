@@ -1,4 +1,4 @@
-"""Developer CLI for ``fe-compiler-v1``.
+"""Developer CLI for ``fe-compiler``.
 
 Thin wrapper: exposes ``fe-compiler --version`` so plugin authors
 can verify the installed distribution quickly. The user-facing
@@ -19,14 +19,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="fe-compiler",
         description=(
-            "Developer CLI for fe-compiler-v1. End users run pipelines "
+            "Developer CLI for fe-compiler. End users run pipelines "
             "through Spec Kit; this CLI only exposes package introspection."
         ),
     )
     parser.add_argument(
         "--version",
         action="version",
-        version=f"fe-compiler-v1 {__version__}",
+        version=f"fe-compiler {__version__}",
     )
     parser.parse_args(argv)
     # No subcommands today; argparse --version exits with 0 before this line.

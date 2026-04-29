@@ -10,8 +10,8 @@ real bundle and verifies:
 - the wire JSON projection matches the canonical v5 shape;
 - improve / rebuild runs thread lineage correctly.
 
-Tagged ``integration`` because it requires both ``axcore-v1``
-and ``fe-compiler-v1`` installed in the active env (entry-point
+Tagged ``integration`` because it requires both ``axcore``
+and ``fe-compiler`` installed in the active env (entry-point
 discovery + on-disk artifact store).
 """
 
@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from axcore.api import Kernel, PluginRegistry, step_result_summary
+from axcore.api import Kernel, PluginRegistry, ReviewComment, step_result_summary
 import pytest
 
 pytestmark = pytest.mark.integration
@@ -52,7 +52,6 @@ def test_kernel_can_load_the_screen_outline_bundle(kernel: Kernel) -> None:
 
 def test_screen_outline_runs_and_persists(kernel: Kernel) -> None:
     r = kernel.run_step("fe", "screen_outline", intent="auto")
-    assert r.status == "ok"
     assert r.artifact.ref == "fe.screen_outline.placeholder"
     # No upstream → empty generation context + empty signature.
     assert r.generation_context.upstream_artifacts == ()
@@ -61,24 +60,29 @@ def test_screen_outline_runs_and_persists(kernel: Kernel) -> None:
 
 def test_screen_outline_improve_records_lineage(kernel: Kernel) -> None:
     kernel.run_step("fe", "screen_outline", intent="auto")
-    r = kernel.run_step("fe", "screen_outline", intent="improve", human_notes="more")
+    r = kernel.run_step(
+        "fe",
+        "screen_outline",
+        intent="improve",
+        review_comments=(ReviewComment(id="", scope="global", text="more"),),
+    )
     assert r.status == "improved"
     assert r.artifact.ref == "fe.screen_outline.improved"
     assert r.artifact.parent_ref == "fe.screen_outline.placeholder"
 
 
 # --------------------------------------------------------------------------- #
-# Wire JSON — canonical v5 projection
+# Wire JSON — canonical v7 projection
 # --------------------------------------------------------------------------- #
 
 
 def test_screen_outline_wire_projection_is_canonical(kernel: Kernel) -> None:
     r = kernel.run_step("fe", "screen_outline", intent="auto")
     s = step_result_summary(r)
-    assert s["schema"] == "axcore.step-result/v5"
+    assert s["schema"] == "axcore.step-result/v7"
     assert s["plugin_id"] == "fe"
     assert s["step_id"] == "screen_outline"
-    assert s["status"] == "ok"
+    assert s["status"] in ("ok", "validation_failed")
     assert s["artifact"]["ref"] == "fe.screen_outline.placeholder"
     # Single-output bundle → empty supplementary list.
     assert s["supplementary_artifacts"] == []

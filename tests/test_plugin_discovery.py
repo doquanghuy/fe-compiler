@@ -1,4 +1,4 @@
-"""Lock ``fe-compiler-v1`` plugin discovery + manifest shape.
+"""Lock ``fe-compiler`` plugin discovery + manifest shape.
 
 These tests prove the minimum identity contract:
 
@@ -41,7 +41,7 @@ def test_fe_plugin_entry_point_is_registered_under_axcore_plugins() -> None:
     names = [ep.name for ep in eps]
     assert "fe" in names, (
         f"axcore.plugins entry-point group is missing `fe`; saw {names!r}. "
-        "Is fe-compiler-v1 pip-installed in the active environment?"
+        "Is fe-compiler pip-installed in the active environment?"
     )
 
 
@@ -86,7 +86,7 @@ def test_manifest_declares_pipeline_workflow() -> None:
     data = _manifest()
     workflows = data.get("workflows") or []
     assert len(workflows) == 1, (
-        "fe-compiler-v1 ships one workflow today; splitting into "
+        "fe-compiler ships one workflow today; splitting into "
         "multiple workflows is a deliberate architectural decision."
     )
     assert workflows[0]["id"] == "fe-pipeline-v1"
@@ -96,7 +96,7 @@ def test_manifest_declares_pipeline_workflow() -> None:
 def test_manifest_declares_one_real_step() -> None:
     data = _manifest()
     assert data["steps"] == ["screen_outline"], (
-        f"fe-compiler-v1's shipped step set drifted; got {data['steps']!r}"
+        f"fe-compiler's shipped step set drifted; got {data['steps']!r}"
     )
 
 

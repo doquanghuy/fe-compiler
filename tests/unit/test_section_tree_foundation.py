@@ -14,9 +14,9 @@ Coverage map (one assertion class per block):
   failure classes (missing marker, extra marker, wrong order) and
   is silent when the template aligns.
 
-These tests are the locking surface for Prompt 1. The next
-prompts (workflow impacts, real BE templates, FE templates, end-to-
-end stale wiring) all build on top of them.
+These tests are the foundation locking surface. Workflow impact tests,
+template alignment tests, and end-to-end stale wiring all build on top
+of them.
 """
 
 from __future__ import annotations

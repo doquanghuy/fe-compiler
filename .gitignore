@@ -66,6 +66,7 @@ ipython_config.py
 .pdm-build/
 .pixi
 __pypackages__/
+uv.lock
 
 # ── Environments ─────────────────────────────────────────────────────────────
 .env
