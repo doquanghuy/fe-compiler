@@ -52,6 +52,7 @@ def test_kernel_can_load_the_screen_outline_bundle(kernel: Kernel) -> None:
 
 def test_screen_outline_runs_and_persists(kernel: Kernel) -> None:
     r = kernel.run_step("fe", "screen_outline", intent="auto")
+    assert r.status == "ok"
     assert r.artifact.ref == "fe.screen_outline.placeholder"
     # No upstream → empty generation context + empty signature.
     assert r.generation_context.upstream_artifacts == ()
@@ -82,7 +83,7 @@ def test_screen_outline_wire_projection_is_canonical(kernel: Kernel) -> None:
     assert s["schema"] == "axcore.step-result/v7"
     assert s["plugin_id"] == "fe"
     assert s["step_id"] == "screen_outline"
-    assert s["status"] in ("ok", "validation_failed")
+    assert s["status"] == "ok"
     assert s["artifact"]["ref"] == "fe.screen_outline.placeholder"
     # Single-output bundle → empty supplementary list.
     assert s["supplementary_artifacts"] == []
