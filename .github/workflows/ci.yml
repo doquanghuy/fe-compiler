@@ -1,21 +1,25 @@
 name: CI
 
-# DEPENDENCY NOTE — pre-publish mode:
+# DEPENDENCY NOTE — release-wheel mode:
 # fe-compiler depends on axcore>=0.1.0,<0.2.0. axcore is a private
-# repository not yet published to PyPI. CI installs axcore by checking
-# out doquanghuy/axcore alongside this repo using CROSS_REPO_PAT.
+# repository not published to PyPI. CI downloads the released wheel from
+# doquanghuy/axcore v0.1.0 on GitHub Releases using CROSS_REPO_PAT.
+#
+# This replaces the previous source-checkout approach and is faster and
+# more deterministic (pinned wheel vs. current HEAD of axcore).
 #
 # Required secret: CROSS_REPO_PAT
 #   - A GitHub Personal Access Token with `repo` scope (read access to
 #     doquanghuy/axcore and doquanghuy/fe-compiler).
 #   - Add it via: Settings → Secrets and variables → Actions →
 #     New repository secret → Name: CROSS_REPO_PAT.
-#   - Without this secret the "Install axcore" step will fail with a
-#     403/404 from GitHub. This is intentional — do not silently skip it.
+#   - Without this secret `gh release download` will fail with an
+#     authentication error. This is intentional — do not silently skip it.
 #
-# When axcore is published to a package registry, replace the checkout +
-# local-install steps with a plain `pip install axcore>=0.1.0,<0.2.0`
-# and remove the CROSS_REPO_PAT requirement. Tracked as P6D item.
+# When axcore is published to a package registry, replace the wheel-download
+# step with `pip install axcore>=0.1.0,<0.2.0` and remove CROSS_REPO_PAT.
+#
+# No live AI. No workflow execution. No package publish.
 
 on:
   push:
@@ -39,23 +43,26 @@ jobs:
       - name: Checkout fe-compiler
         uses: actions/checkout@v4
 
-      - name: Checkout axcore dependency
-        uses: actions/checkout@v4
-        with:
-          repository: doquanghuy/axcore
-          path: vendor/axcore
-          token: ${{ secrets.CROSS_REPO_PAT }}
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
-      - name: Install axcore from local checkout
+      - name: Download axcore release wheel
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
+        run: |
+          gh release download v0.1.0 \
+            --repo doquanghuy/axcore \
+            --pattern "axcore-0.1.0-py3-none-any.whl" \
+            --dir vendor/wheels \
+            --clobber
+
+      - name: Install axcore from release wheel
         run: |
           python -m pip install --upgrade pip
-          pip install ./vendor/axcore
+          pip install vendor/wheels/axcore-0.1.0-py3-none-any.whl
 
       - name: Install fe-compiler dev dependencies
         run: pip install -e ".[dev]"
@@ -76,22 +83,25 @@ jobs:
       - name: Checkout fe-compiler
         uses: actions/checkout@v4
 
-      - name: Checkout axcore dependency
-        uses: actions/checkout@v4
-        with:
-          repository: doquanghuy/axcore
-          path: vendor/axcore
-          token: ${{ secrets.CROSS_REPO_PAT }}
-
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install axcore from local checkout
+      - name: Download axcore release wheel
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
+        run: |
+          gh release download v0.1.0 \
+            --repo doquanghuy/axcore \
+            --pattern "axcore-0.1.0-py3-none-any.whl" \
+            --dir vendor/wheels \
+            --clobber
+
+      - name: Install axcore from release wheel
         run: |
           python -m pip install --upgrade pip
-          pip install ./vendor/axcore
+          pip install vendor/wheels/axcore-0.1.0-py3-none-any.whl
 
       - name: Install build
         run: pip install build
