@@ -21,7 +21,7 @@ name = "fe-compiler"
 version = "0.1.0"
 description = "fe-compiler — frontend-domain compiler package built on axcore."
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
 requires-python = ">=3.11"
 authors = [
     { name = "fe-compiler maintainers" },
