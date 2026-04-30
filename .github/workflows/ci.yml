@@ -1,0 +1,100 @@
+name: CI
+
+# DEPENDENCY NOTE — pre-publish mode:
+# fe-compiler depends on axcore>=0.1.0,<0.2.0. axcore is a private
+# repository not yet published to PyPI. CI installs axcore by checking
+# out doquanghuy/axcore alongside this repo using CROSS_REPO_PAT.
+#
+# Required secret: CROSS_REPO_PAT
+#   - A GitHub Personal Access Token with `repo` scope (read access to
+#     doquanghuy/axcore and doquanghuy/fe-compiler).
+#   - Add it via: Settings → Secrets and variables → Actions →
+#     New repository secret → Name: CROSS_REPO_PAT.
+#   - Without this secret the "Install axcore" step will fail with a
+#     403/404 from GitHub. This is intentional — do not silently skip it.
+#
+# When axcore is published to a package registry, replace the checkout +
+# local-install steps with a plain `pip install axcore>=0.1.0,<0.2.0`
+# and remove the CROSS_REPO_PAT requirement. Tracked as P6D item.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: tests + build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout fe-compiler
+        uses: actions/checkout@v4
+
+      - name: Checkout axcore dependency
+        uses: actions/checkout@v4
+        with:
+          repository: doquanghuy/axcore
+          path: vendor/axcore
+          token: ${{ secrets.CROSS_REPO_PAT }}
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install axcore from local checkout
+        run: |
+          python -m pip install --upgrade pip
+          pip install ./vendor/axcore
+
+      - name: Install fe-compiler dev dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Format check (ruff)
+        run: ruff format --check .
+
+      - name: Tests (pytest)
+        run: pytest -q
+
+  build:
+    name: build wheel + sdist
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fe-compiler
+        uses: actions/checkout@v4
+
+      - name: Checkout axcore dependency
+        uses: actions/checkout@v4
+        with:
+          repository: doquanghuy/axcore
+          path: vendor/axcore
+          token: ${{ secrets.CROSS_REPO_PAT }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install axcore from local checkout
+        run: |
+          python -m pip install --upgrade pip
+          pip install ./vendor/axcore
+
+      - name: Install build
+        run: pip install build
+
+      - name: Build wheel and sdist
+        run: python -m build

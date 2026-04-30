@@ -17,7 +17,7 @@ for the locked integration design.
 - **Importable package:** `fe_compiler`.
 - **Plugin id:** `fe`.
 - **Framework dependency:** `axcore`.
-- **Workflow id:** `fe-pipeline-v1` (Spec Kit `schema_version:
+- **Workflow id:** `fe-pipeline` (Spec Kit `schema_version:
   "1.0"`).
 - **Step bundle shipped:** `screen_outline` — describes UI screens
   / navigation surface.
@@ -27,7 +27,7 @@ for the locked integration design.
 ```
 ┌──────────────────────────────────────────────────┐
 │                   End user                        │
-│     $ specify workflow run fe-pipeline-v1        │
+│     $ specify workflow run fe-pipeline        │
 └─────────────────────▲────────────────────────────┘
                       │
 ┌─────────────────────┴────────────────────────────┐
@@ -57,7 +57,7 @@ for the locked integration design.
 - **Plugin identity.** `plugin_id: fe` declared in
   `src/fe_compiler/plugin/plugin.yaml` and exposed via the
   `axcore.plugins` entry-point group (entry-point name `fe`).
-- **Frontend workflow.** `src/fe_compiler/workflows/fe_pipeline_v1.yaml`,
+- **Frontend workflow.** `src/fe_compiler/workflows/fe_pipeline.yaml`,
   Spec Kit `schema_version: "1.0"`. Action steps dispatch the
   `speckit.axcore.step-run` SKILL shipped by the `axcore`
   extension.
@@ -148,7 +148,7 @@ make check                        # lint + typecheck + tests (CI gate)
 End users run the pipeline through Spec Kit:
 
 ```bash
-specify workflow run fe-pipeline-v1
+specify workflow run fe-pipeline
 ```
 
 Spec Kit dispatches `/speckit-axcore-step-run`; the SKILL calls

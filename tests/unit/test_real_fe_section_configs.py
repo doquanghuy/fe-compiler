@@ -184,7 +184,7 @@ def test_impacts_ledger_matches_expected() -> None:
 
 
 def test_screen_outline_is_terminal_today_with_no_impacts_file() -> None:
-    """`screen_outline` is the sole step of `fe-pipeline-v1` today;
+    """`screen_outline` is the sole step of `fe-pipeline` today;
     with no downstream consumer in any workflow, it ships no impacts
     file. Pins the partial-rollout shape against accidental drift
     (a stray empty impacts file would still fail this test)."""

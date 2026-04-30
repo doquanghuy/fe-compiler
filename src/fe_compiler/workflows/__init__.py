@@ -13,7 +13,7 @@ they may exist as drafts or documentation-only references.
 
 Shipped today:
 
-- ``fe_pipeline_v1.yaml`` — workflow ``fe-pipeline-v1``. Single
+- ``fe_pipeline.yaml`` — workflow ``fe-pipeline``. Single
   entry step (``screen_outline``) dispatched via the canonical
   ``/speckit-axcore-step-run`` slash form. No gate, no fan-out,
   no fan-in — the smallest honest end-to-end shape that proves

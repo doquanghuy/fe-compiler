@@ -1,4 +1,4 @@
-"""Workflow-shape proof for ``fe-pipeline-v1``.
+"""Workflow-shape proof for ``fe-pipeline``.
 
 Locks the compiler-owned workflow YAML against the mode-specific command
 routing architecture. The ``screen_outline`` action step is a switch on
@@ -24,7 +24,7 @@ _WORKFLOW_PATH = (
     / "src"
     / "fe_compiler"
     / "workflows"
-    / "fe_pipeline_v1.yaml"
+    / "fe_pipeline.yaml"
 )
 
 _MODE_COMMANDS = {
@@ -73,11 +73,11 @@ def test_workflow_uses_spec_kit_schema_v1_0() -> None:
     assert data.get("schema_version") == "1.0"
 
 
-def test_workflow_identifies_as_fe_pipeline_v1() -> None:
+def test_workflow_identifies_as_fe_pipeline() -> None:
     data = _load_workflow()
     workflow = data.get("workflow")
     assert isinstance(workflow, dict)
-    assert workflow.get("id") == "fe-pipeline-v1"
+    assert workflow.get("id") == "fe-pipeline"
     assert workflow.get("name")
     assert workflow.get("version")
 
@@ -227,8 +227,8 @@ def test_no_command_field_uses_template_interpolation() -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_all_fe_pipeline_v1_command_args_include_workflow_id() -> None:
-    """Every step-run command invocation in fe-pipeline-v1 must pass workflow_id=fe-pipeline-v1.
+def test_all_fe_pipeline_command_args_include_workflow_id() -> None:
+    """Every step-run command invocation in fe-pipeline must pass workflow_id=fe-pipeline.
 
     Ensures workflow_id is threaded through all command args for observability.
     """
@@ -237,6 +237,6 @@ def test_all_fe_pipeline_v1_command_args_include_workflow_id() -> None:
     assert cmds, "expected at least one command step"
     for cmd in cmds:
         args = (cmd.get("input") or {}).get("args", "")
-        assert "workflow_id=fe-pipeline-v1" in args, (
-            f"command step {cmd.get('id')!r} missing workflow_id=fe-pipeline-v1 in args: {args!r}"
+        assert "workflow_id=fe-pipeline" in args, (
+            f"command step {cmd.get('id')!r} missing workflow_id=fe-pipeline in args: {args!r}"
         )

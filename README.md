@@ -9,20 +9,21 @@ Frontend-domain compiler package for
 | Distribution        | `fe-compiler` |
 | Importable package  | `fe_compiler` |
 | Plugin id           | `fe` |
-| Workflow            | `fe-pipeline-v1` |
+| Workflow            | `fe-pipeline` |
 | Step bundle         | `screen_outline` (single step today) |
 
 `axcore` discovers this package through the `axcore.plugins`
 entry-point group. This package contributes one Spec Kit
-workflow and one step bundle against the same
-`speckit.axcore.step-run` SKILL that powers `be-compiler`.
+workflow and one step bundle. Spec Kit dispatches the mode-specific
+axcore SKILLs (`speckit.axcore.step-run-fast`, `-review`, `-strict`)
+for each action step, the same commands that power `be-compiler`.
 
 ## Scope today (honestly partial)
 
 One step: **`screen_outline`** — describes the UI screens /
 navigation surface of the target system.
 
-- No upstream consumption (entry step of `fe-pipeline-v1`).
+- No upstream consumption (entry step of `fe-pipeline`).
 - Single primary artifact (Markdown, `text/markdown`).
 - Deterministic validation — required sections, unresolved
   placeholders, section-marker integrity.
@@ -50,11 +51,13 @@ extension installed:
 
 ```bash
 # from the app repo:
-specify workflow run fe-pipeline-v1
+specify workflow run fe-pipeline
 ```
 
-Spec Kit dispatches the `/speckit-axcore-step-run` SKILL
-(shipped by the `axcore` extension); the SKILL calls
+Spec Kit dispatches the mode-specific SKILL for each action step
+(`speckit.axcore.step-run-fast`, `speckit.axcore.step-run-review`,
+or `speckit.axcore.step-run-strict`, depending on `quality_mode`),
+shipped by the `axcore` extension; each SKILL calls
 `axcore.api.Kernel` against the bundles this package ships.
 
 ## Install (dev)

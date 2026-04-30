@@ -34,7 +34,7 @@ Locked schema
 The on-disk file shape is locked at::
 
     schema: axcore.section-impacts/v1
-    workflow_id: fe-pipeline-v1
+    workflow_id: fe-pipeline
     step_id: screen_outline
 
     impacts:
@@ -133,7 +133,7 @@ _ALLOWED_IMPACT_KEYS: frozenset[str] = frozenset({"from_section", "to"})
 _ALLOWED_TO_KEYS: frozenset[str] = frozenset({"step_id", "target", "section_ids"})
 
 # Filename-id grammar: lowercase alphanumeric + hyphens (matches the
-# Spec Kit workflow-id grammar — see workflows/fe_pipeline_v1.yaml).
+# Spec Kit workflow-id grammar — see workflows/fe_pipeline.yaml).
 _FILENAME_WORKFLOW_ID_PATTERN: re.Pattern[str] = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 

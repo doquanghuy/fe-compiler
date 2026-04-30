@@ -1,7 +1,7 @@
 """Optional dev CLI for ``fe-compiler``.
 
 Not the user-facing runtime. End users run the pipeline through
-Spec Kit (``specify workflow run fe-pipeline-v1``). This CLI
+Spec Kit (``specify workflow run fe-pipeline``). This CLI
 exists for plugin-author local exercise.
 """
 

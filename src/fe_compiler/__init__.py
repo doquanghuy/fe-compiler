@@ -1,12 +1,12 @@
 """fe-compiler — frontend-domain compiler package built on axcore.
 
 Sibling of ``be-compiler``. Contributes a plugin manifest, one
-Spec Kit workflow definition (``fe-pipeline-v1``), and one real
+Spec Kit workflow definition (``fe-pipeline``), and one real
 step bundle (``screen_outline``) against the
 mode-specific step-run SKILL handlers that ``axcore`` ships.
 
 End users run the pipeline through Spec Kit
-(``specify workflow run fe-pipeline-v1``); this package never
+(``specify workflow run fe-pipeline``); this package never
 implements orchestration.
 
 Subpackages:

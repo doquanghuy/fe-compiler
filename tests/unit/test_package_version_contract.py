@@ -23,7 +23,7 @@ _PLUGIN_MANIFEST = _REPO_ROOT / "src" / "fe_compiler" / "plugin" / "plugin.yaml"
 
 _EXPECTED_VERSION = "0.1.0"
 _EXPECTED_DIST_NAME = "fe-compiler"
-_PRODUCTION_WORKFLOW = "fe_pipeline_v1.yaml"
+_PRODUCTION_WORKFLOW = "fe_pipeline.yaml"
 
 
 def _load_yaml(path: Path) -> dict:

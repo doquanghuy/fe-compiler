@@ -61,9 +61,9 @@ def test_plugin_manifest_requires_axcore_compat() -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_fe_pipeline_v1_present_in_package_data() -> None:
+def test_fe_pipeline_present_in_package_data() -> None:
     wf_names = {f.name for f in _assets.iter_workflow_files()}
-    assert "fe_pipeline_v1.yaml" in wf_names
+    assert "fe_pipeline.yaml" in wf_names
 
 
 def test_workflow_files_are_valid_yaml() -> None:
@@ -180,7 +180,7 @@ def test_plugin_manifest_readable_via_traversable_only() -> None:
 
 
 def test_workflow_yaml_readable_via_traversable_only() -> None:
-    traversable = files("fe_compiler.workflows") / "fe_pipeline_v1.yaml"
+    traversable = files("fe_compiler.workflows") / "fe_pipeline.yaml"
     assert len(traversable.read_bytes()) > 0
 
 

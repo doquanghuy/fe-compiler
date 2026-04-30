@@ -49,7 +49,7 @@ workflow gets *its own* impacts file:
 
 ```
 bundles/flows/screen_outline/
-    section_impacts.fe-pipeline-v1.yaml
+    section_impacts.fe-pipeline.yaml
     section_impacts.fe-design-refresh-v1.yaml
 ```
 
@@ -73,7 +73,7 @@ Locked v1 shape:
 
 ```yaml
 schema: axcore.section-impacts/v1
-workflow_id: fe-pipeline-v1
+workflow_id: fe-pipeline
 step_id: screen_outline
 
 impacts:

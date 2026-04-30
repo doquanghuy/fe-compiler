@@ -1,4 +1,4 @@
-# fe-compiler — `fe-pipeline-v1` workflow.
+# fe-compiler — `fe-pipeline` workflow.
 #
 # Spec Kit public workflow schema (`schema_version: "1.0"`).
 #
@@ -15,12 +15,12 @@
 #
 # Identity:
 #   plugin        = fe                          (see plugin.yaml)
-#   workflow_id   = fe-pipeline-v1              (lowercase alphanumeric + hyphens)
+#   workflow_id   = fe-pipeline                 (lowercase alphanumeric + hyphens)
 
 schema_version: "1.0"
 
 workflow:
-  id: "fe-pipeline-v1"
+  id: "fe-pipeline"
   name: "Frontend compiler pipeline"
   version: "0.1.0"
   author: "fe-compiler"
@@ -28,7 +28,7 @@ workflow:
   description: |
     Produce the frontend screen-outline artifact through the
     axcore kernel. Proves multi-compiler coexistence: the same
-    SKILL + kernel + wire contract that powers `be-pipeline-v1`
+    SKILL + kernel + wire contract that powers `be-pipeline`
     drives this FE pipeline against fe-compiler's
     plugin-owned bundles.
 
@@ -47,7 +47,7 @@ inputs:
     type: string
     default: "auto"
     enum: ["auto", "improve", "rebuild"]
-  # 3-channel input model — mirrors the canonical clean inputs from be-pipeline-v1:
+  # 3-channel input model — mirrors the canonical clean inputs from be-pipeline:
   #   seed_path             → file-first build brief / seed material.
   #   review_comments_path  → reviewer guidance for the current run.
   #   prior_run_id          → wires the prior-run findings memory.
@@ -83,18 +83,18 @@ steps:
           integration: "claude"
           command: "speckit.axcore.step-run-fast"
           input:
-            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline-v1 intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }}"
+            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }}"
       review:
         - id: screen_outline-review
           type: command
           integration: "claude"
           command: "speckit.axcore.step-run-review"
           input:
-            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline-v1 intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }} max_quality_iterations={{ inputs.max_quality_iterations }}"
+            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }} max_quality_iterations={{ inputs.max_quality_iterations }}"
       strict:
         - id: screen_outline-strict
           type: command
           integration: "claude"
           command: "speckit.axcore.step-run-strict"
           input:
-            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline-v1 intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }} max_quality_iterations={{ inputs.max_quality_iterations }} max_structural_iterations={{ inputs.max_structural_iterations }}"
+            args: "plugin_id=fe step_id=screen_outline workflow_id=fe-pipeline intent={{ inputs.intent }} seed_path={{ inputs.seed_path }} review_comments_path={{ inputs.review_comments_path }} prior_run_id={{ inputs.prior_run_id }} max_quality_iterations={{ inputs.max_quality_iterations }} max_structural_iterations={{ inputs.max_structural_iterations }}"

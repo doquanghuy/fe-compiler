@@ -10,7 +10,7 @@
 # Identity:
 #   plugin_id     = fe
 #   importable    = fe_compiler        (Python module name)
-#   workflow      = fe-pipeline-v1     (Spec Kit schema_version "1.0";
+#   workflow      = fe-pipeline        (Spec Kit schema_version "1.0";
 #                                       lowercase alphanumeric + hyphens)
 #   container     = bundles/flows/     (artifact-type container)
 #   steps         = screen_outline
@@ -32,8 +32,8 @@ requires:
   axcore: ">=0.1.0,<0.2.0"
 
 workflows:
-  - id: fe-pipeline-v1
-    file: workflows/fe_pipeline_v1.yaml
+  - id: fe-pipeline
+    file: workflows/fe_pipeline.yaml
 
 steps:
   - screen_outline
@@ -56,7 +56,7 @@ metadata:
     Frontend-domain compiler package for axcore. Contributes a
     plugin manifest, one Spec Kit workflow definition, and one
     real step bundle. End-user runs happen through Spec Kit
-    (`specify workflow run fe-pipeline-v1`); this package is not
+    (`specify workflow run fe-pipeline`); this package is not
     a runtime shell.
   framework: axcore
   importable_package: fe_compiler

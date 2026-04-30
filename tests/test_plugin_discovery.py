@@ -6,7 +6,7 @@ These tests prove the minimum identity contract:
   entry point with name ``"fe"``;
 - the entry-point class constructs + carries ``metadata.name == "fe"``;
 - the manifest YAML loads with the locked identity fields;
-- the plugin declares exactly one workflow id (``fe-pipeline-v1``);
+- the plugin declares exactly one workflow id (``fe-pipeline``);
 - the plugin declares exactly one step (``screen_outline``); and
 - the step bundle resolves and carries the expected resource
   keys (template / rules / validation_spec).
@@ -89,8 +89,8 @@ def test_manifest_declares_pipeline_workflow() -> None:
         "fe-compiler ships one workflow today; splitting into "
         "multiple workflows is a deliberate architectural decision."
     )
-    assert workflows[0]["id"] == "fe-pipeline-v1"
-    assert workflows[0]["file"] == "workflows/fe_pipeline_v1.yaml"
+    assert workflows[0]["id"] == "fe-pipeline"
+    assert workflows[0]["file"] == "workflows/fe_pipeline.yaml"
 
 
 def test_manifest_declares_one_real_step() -> None:
@@ -122,7 +122,7 @@ def test_registry_discovers_fe_plugin(registry: PluginRegistry) -> None:
 
 
 def test_registry_workflow_ids_for_fe(registry: PluginRegistry) -> None:
-    assert registry.workflow_ids("fe") == ["fe-pipeline-v1"]
+    assert registry.workflow_ids("fe") == ["fe-pipeline"]
 
 
 def test_registry_can_load_the_screen_outline_bundle(

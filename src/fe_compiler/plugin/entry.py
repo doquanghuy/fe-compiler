@@ -31,7 +31,7 @@ runtime hooks ``load_section_impact_graph`` and
 ``extract_section_hashes`` are deliberate ``return None``
 overrides. This position is locked because:
 
-- the canonical FE workflow (``fe-pipeline-v1``) has a single
+- the canonical FE workflow (``fe-pipeline``) has a single
   entry step (``screen_outline``) with no downstream consumers;
 - FE ships zero ``section_impacts.<workflow>.yaml`` files (locked
   by ``tests/unit/test_real_fe_section_configs.py``);

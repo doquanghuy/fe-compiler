@@ -6,7 +6,7 @@ discovery result from axcore's provider contract.
 Locked invariants:
 
 1. ``fe`` plugin appears in ``discover_installed_plugins()`` result.
-2. FE plugin declares the canonical workflow id ``fe-pipeline-v1``.
+2. FE plugin declares the canonical workflow id ``fe-pipeline``.
 3. FE workflow file exists on disk and is readable YAML.
 4. ``list_workflow_resources`` includes the FE workflow.
 5. FE plugin's ``package_root`` resolves to the fe_compiler package directory.
@@ -16,8 +16,6 @@ Locked invariants:
 
 from __future__ import annotations
 
-import yaml
-
 from axcore.plugins.provider import (
     DiscoveredPlugin,
     PluginDiscoveryResult,
@@ -25,8 +23,9 @@ from axcore.plugins.provider import (
     discover_installed_plugins,
     list_workflow_resources,
 )
+import yaml
 
-_FE_WORKFLOW_IDS = frozenset({"fe-pipeline-v1"})
+_FE_WORKFLOW_IDS = frozenset({"fe-pipeline"})
 
 
 def _result() -> PluginDiscoveryResult:
@@ -61,8 +60,8 @@ def test_fe_discovery_result_has_no_errors() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_fe_pipeline_v1_in_workflow_ids() -> None:
-    assert "fe-pipeline-v1" in _fe_plugin().workflow_ids
+def test_fe_pipeline_in_workflow_ids() -> None:
+    assert "fe-pipeline" in _fe_plugin().workflow_ids
 
 
 def test_fe_has_exactly_one_workflow_id() -> None:
@@ -102,17 +101,21 @@ def test_fe_workflow_ids_and_files_parallel() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_list_workflow_resources_includes_fe_pipeline_v1() -> None:
+def test_list_workflow_resources_includes_fe_pipeline() -> None:
     result = _result()
-    ids = {wr.workflow_id for wr in list_workflow_resources(result) if wr.plugin_id == "fe"}
-    assert "fe-pipeline-v1" in ids
+    ids = {
+        wr.workflow_id for wr in list_workflow_resources(result) if wr.plugin_id == "fe"
+    }
+    assert "fe-pipeline" in ids
 
 
 def test_list_workflow_resources_fe_path_exists() -> None:
     result = _result()
     for wr in list_workflow_resources(result):
         if wr.plugin_id == "fe":
-            assert wr.path.is_file(), f"FE workflow resource path not on disk: {wr.path}"
+            assert wr.path.is_file(), (
+                f"FE workflow resource path not on disk: {wr.path}"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -122,7 +125,9 @@ def test_list_workflow_resources_fe_path_exists() -> None:
 
 def test_fe_package_root_is_directory() -> None:
     dp = _fe_plugin()
-    assert dp.package_root.is_dir(), f"fe package_root not a directory: {dp.package_root}"
+    assert dp.package_root.is_dir(), (
+        f"fe package_root not a directory: {dp.package_root}"
+    )
 
 
 def test_fe_package_root_contains_fe_compiler_package() -> None:

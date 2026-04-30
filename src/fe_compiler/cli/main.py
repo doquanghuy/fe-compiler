@@ -2,7 +2,7 @@
 
 Thin wrapper: exposes ``fe-compiler --version`` so plugin authors
 can verify the installed distribution quickly. The user-facing
-runtime is Spec Kit (``specify workflow run fe-pipeline-v1``) —
+runtime is Spec Kit (``specify workflow run fe-pipeline``) —
 this CLI deliberately does not try to reimplement orchestration
 or drive steps directly.
 """

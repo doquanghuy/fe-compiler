@@ -62,7 +62,7 @@ def _screen_outline_impacts_payload() -> dict[str, Any]:
     """Canonical mixed-mode fixture: section + subtree + artifact."""
     return {
         "schema": SECTION_IMPACTS_SCHEMA,
-        "workflow_id": "fe-pipeline-v1",
+        "workflow_id": "fe-pipeline",
         "step_id": "screen_outline",
         "impacts": [
             {
@@ -177,9 +177,9 @@ def test_module_exports_documented_surface() -> None:
 
 
 def test_filename_round_trip() -> None:
-    name = section_impacts_filename("fe-pipeline-v1")
-    assert name == "section_impacts.fe-pipeline-v1.yaml"
-    assert parse_workflow_id_from_filename(name) == "fe-pipeline-v1"
+    name = section_impacts_filename("fe-pipeline")
+    assert name == "section_impacts.fe-pipeline.yaml"
+    assert parse_workflow_id_from_filename(name) == "fe-pipeline"
 
 
 def test_filename_round_trip_for_alt_workflow() -> None:
@@ -202,7 +202,7 @@ def test_parse_workflow_id_returns_none_for_non_matches() -> None:
         "section_impacts.has space.yaml",
         "section_impacts.has/slash.yaml",
         "section_impacts.has.dot.yaml",
-        "section_impacts.fe-pipeline-v1.yml",
+        "section_impacts.fe-pipeline.yml",
         "bundle.yaml",
         "",
     ):
@@ -217,11 +217,11 @@ def test_parse_workflow_id_returns_none_for_non_matches() -> None:
 def test_parse_section_impacts_happy_path_mixed_modes() -> None:
     parsed = parse_section_impacts(
         _screen_outline_impacts_payload(),
-        expected_workflow_id="fe-pipeline-v1",
+        expected_workflow_id="fe-pipeline",
         expected_step_id="screen_outline",
     )
     assert isinstance(parsed, SectionImpactsFile)
-    assert parsed.workflow_id == "fe-pipeline-v1"
+    assert parsed.workflow_id == "fe-pipeline"
     assert parsed.step_id == "screen_outline"
     assert len(parsed.impacts) == 1
     rule = parsed.impacts[0]
@@ -446,7 +446,7 @@ def test_validate_against_section_trees_allows_artifact_for_downstream_without_t
 ):
     payload = {
         "schema": SECTION_IMPACTS_SCHEMA,
-        "workflow_id": "fe-pipeline-v1",
+        "workflow_id": "fe-pipeline",
         "step_id": "screen_outline",
         "impacts": [
             {
@@ -471,7 +471,7 @@ def test_validate_against_section_trees_rejects_section_target_for_tree_less_dow
 ):
     payload = {
         "schema": SECTION_IMPACTS_SCHEMA,
-        "workflow_id": "fe-pipeline-v1",
+        "workflow_id": "fe-pipeline",
         "step_id": "screen_outline",
         "impacts": [
             {
@@ -504,7 +504,7 @@ def test_validate_against_section_trees_rejects_subtree_target_for_tree_less_dow
 ):
     payload = {
         "schema": SECTION_IMPACTS_SCHEMA,
-        "workflow_id": "fe-pipeline-v1",
+        "workflow_id": "fe-pipeline",
         "step_id": "screen_outline",
         "impacts": [
             {
@@ -534,10 +534,10 @@ def test_validate_against_section_trees_rejects_subtree_target_for_tree_less_dow
 
 
 def _write_screen_outline_impacts(bundle_dir: Path) -> Path:
-    path = bundle_dir / "section_impacts.fe-pipeline-v1.yaml"
+    path = bundle_dir / "section_impacts.fe-pipeline.yaml"
     path.write_text(
         "schema: axcore.section-impacts/v1\n"
-        "workflow_id: fe-pipeline-v1\n"
+        "workflow_id: fe-pipeline\n"
         "step_id: screen_outline\n"
         "impacts:\n"
         "  - from_section: SCREEN_OUTLINE.LAYOUT\n"
@@ -556,16 +556,16 @@ def _write_screen_outline_impacts(bundle_dir: Path) -> Path:
 def test_load_section_impacts_returns_none_when_absent(tmp_path: Path) -> None:
     bundle_dir = tmp_path / "screen_outline"
     bundle_dir.mkdir()
-    assert load_section_impacts(bundle_dir, "fe-pipeline-v1") is None
+    assert load_section_impacts(bundle_dir, "fe-pipeline") is None
 
 
 def test_load_section_impacts_parses_present_file(tmp_path: Path) -> None:
     bundle_dir = tmp_path / "screen_outline"
     bundle_dir.mkdir()
     _write_screen_outline_impacts(bundle_dir)
-    parsed = load_section_impacts(bundle_dir, "fe-pipeline-v1")
+    parsed = load_section_impacts(bundle_dir, "fe-pipeline")
     assert parsed is not None
-    assert parsed.workflow_id == "fe-pipeline-v1"
+    assert parsed.workflow_id == "fe-pipeline"
     assert parsed.step_id == "screen_outline"
     assert len(parsed.impacts) == 1
     assert parsed.impacts[0].from_section == "SCREEN_OUTLINE.LAYOUT"
@@ -577,15 +577,15 @@ def test_load_section_impacts_uses_dir_name_as_expected_step_id(
     bundle_dir = tmp_path / "overview"
     bundle_dir.mkdir()
     # File claims step_id=screen_outline but lives in overview/ — drift.
-    (bundle_dir / "section_impacts.fe-pipeline-v1.yaml").write_text(
+    (bundle_dir / "section_impacts.fe-pipeline.yaml").write_text(
         "schema: axcore.section-impacts/v1\n"
-        "workflow_id: fe-pipeline-v1\n"
+        "workflow_id: fe-pipeline\n"
         "step_id: screen_outline\n"
         "impacts: []\n",
         encoding="utf-8",
     )
     with pytest.raises(SectionImpactsError, match="step_id mismatch"):
-        load_section_impacts(bundle_dir, "fe-pipeline-v1")
+        load_section_impacts(bundle_dir, "fe-pipeline")
 
 
 # --------------------------------------------------------------------------- #
@@ -607,8 +607,8 @@ def test_load_all_section_impacts_returns_dict_keyed_by_workflow_id(
         encoding="utf-8",
     )
     out = load_all_section_impacts(bundle_dir)
-    assert set(out) == {"fe-pipeline-v1", "fe-design-refresh-v1"}
-    assert out["fe-pipeline-v1"].workflow_id == "fe-pipeline-v1"
+    assert set(out) == {"fe-pipeline", "fe-design-refresh-v1"}
+    assert out["fe-pipeline"].workflow_id == "fe-pipeline"
     assert out["fe-design-refresh-v1"].impacts == ()
 
 
@@ -617,8 +617,8 @@ def test_load_all_section_impacts_flags_filename_content_workflow_id_drift(
 ) -> None:
     bundle_dir = tmp_path / "screen_outline"
     bundle_dir.mkdir()
-    # Filename says fe-pipeline-v1; body says fe-design-refresh-v1.
-    (bundle_dir / "section_impacts.fe-pipeline-v1.yaml").write_text(
+    # Filename says fe-pipeline; body says fe-design-refresh-v1.
+    (bundle_dir / "section_impacts.fe-pipeline.yaml").write_text(
         "schema: axcore.section-impacts/v1\n"
         "workflow_id: fe-design-refresh-v1\n"
         "step_id: screen_outline\n"

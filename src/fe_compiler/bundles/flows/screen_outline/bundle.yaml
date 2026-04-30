@@ -3,7 +3,7 @@
 # Identity:
 #   plugin_id   = fe
 #   step_id     = screen_outline
-#   consumes    = nothing today (entry step of fe-pipeline-v1)
+#   consumes    = nothing today (entry step of fe-pipeline)
 #   produces    = single primary artifact (Markdown)
 
 step_id: screen_outline
@@ -13,7 +13,7 @@ description: |
   description of the UI's screens (pages), the navigation surface
   between them, and the cross-screen component surface.
 
-  This is the entry step of `fe-pipeline-v1`. It has no required
+  This is the entry step of `fe-pipeline`. It has no required
   upstream — future frontend steps can declare cross-step
   consumption via `required_inputs` (§6.14) once they exist.
 
@@ -61,7 +61,7 @@ retry_policy:
 dependency_metadata: {}
 
 # EXEC-A per-step execution + capability contract. The entry
-# step of fe-pipeline-v1: no upstream to consume. Supports
+# step of fe-pipeline: no upstream to consume. Supports
 # improve + rebuild; validation is real (SCREENS section markers
 # + placeholder resolution). Flagged `review_heavy: true`
 # because UI / navigation-surface output benefits from a human
