@@ -21,7 +21,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 _WORKFLOWS_DIR = _REPO_ROOT / "src" / "fe_compiler" / "workflows"
 _PLUGIN_MANIFEST = _REPO_ROOT / "src" / "fe_compiler" / "plugin" / "plugin.yaml"
 
-_EXPECTED_VERSION = "0.1.0"
+_EXPECTED_VERSION = "0.1.1"
 _EXPECTED_DIST_NAME = "fe-compiler"
 _PRODUCTION_WORKFLOW = "fe_pipeline.yaml"
 

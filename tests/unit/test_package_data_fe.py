@@ -44,7 +44,7 @@ def test_plugin_manifest_version_0_1_0() -> None:
     data = yaml.safe_load(
         _assets.get_plugin_manifest_path().read_text(encoding="utf-8")
     )
-    assert data.get("version") == "0.1.0"
+    assert data.get("version") == "0.1.1"
 
 
 def test_plugin_manifest_requires_axcore_compat() -> None:

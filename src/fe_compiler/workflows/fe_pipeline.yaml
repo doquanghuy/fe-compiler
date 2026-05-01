@@ -22,7 +22,7 @@ schema_version: "1.0"
 workflow:
   id: "fe-pipeline"
   name: "Frontend compiler pipeline"
-  version: "0.1.0"
+  version: "0.1.1"
   author: "fe-compiler"
   workflow_status: production
   description: |

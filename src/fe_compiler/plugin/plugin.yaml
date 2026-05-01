@@ -23,7 +23,7 @@
 #   (§6.14 in axcore/docs/spec-kit-extension.md).
 
 plugin_id: fe
-version: 0.1.0
+version: 0.1.1
 
 # Framework compatibility requirement.
 # The loader does not enforce this at runtime (P4 work);
